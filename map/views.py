@@ -8,3 +8,7 @@ def country_list(request):
 
 def map_view(request):
     return render(request, "map/map.html")
+
+def africa_map(request):
+    return render(request, "map/africa_map.html")
+
