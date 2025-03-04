@@ -3,8 +3,24 @@ from django.http import JsonResponse
 from .models import Country
 
 def country_list(request):
-    countries = Country.objects.all().values("code", "name", "capital", "population", "area")
+    countries = Country.objects.all().values(
+        "code",
+        "name",
+        "official_name",
+        "capital",
+        "population",
+        "area",
+        "languages",
+        "flag_url",
+        "timezone",
+        "gini_index",
+        "currency_name",
+        "currency_symbol",
+        "demonym_m",
+        "demonym_f",
+    )
     return JsonResponse(list(countries), safe=False)
+
 
 def africa_map(request):
     return render(request, "map/africa_map.html")
