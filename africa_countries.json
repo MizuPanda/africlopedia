@@ -1,6 +1,7 @@
 [
     {
         "name": "Nigeria",
+        "id": "NG",
         "capital": "Abuja",
         "population": 206139589,
         "area": 923768,
@@ -8,6 +9,7 @@
     },
     {
         "name": "Egypt",
+        "id": "EG",
         "capital": "Cairo",
         "population": 102334404,
         "area": 1002450,

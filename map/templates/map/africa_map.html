@@ -10,6 +10,7 @@
    viewBox="0 0 239 217"
    id="svg2"
    version="1.1">
+    
    <style>
       body {
           display: flex;
@@ -25,8 +26,18 @@
          height: auto;  /* Maintain aspect ratio */
          max-height: 90vh;  /* Prevent it from being too tall */
       }
+      path {
+         fill: #800080;  /* Purple color */
+         stroke: #000;  /* Black border */
+         stroke-width: 0.5;
+         transition: fill 0.3s;
+     }
+     
+     path:hover {
+         fill: #a020f0; /* Lighter purple on hover */
+     }
   </style>
-  
+
   <metadata
      id="metadata263">
     <rdf:RDF>
@@ -342,3 +353,80 @@
      title="Zimbabwe"
      id="ZW" />
 </svg>
+
+<div id="info-box" class="info-box">
+   <h2 id="country-name"></h2>
+   <p><strong>Capital:</strong> <span id="capital"></span></p>
+   <p><strong>Population:</strong> <span id="population"></span></p>
+</div>
+
+
+<style>
+   .info-box {
+    position: absolute; /* Ensure it stays on top */
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    display: none; /* Initially hidden */
+    border: 1px solid black;
+    background-color: white;
+    width: 300px;
+    text-align: center;
+    z-index: 1000; /* Ensure it stays above the map */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); /* Add a shadow */
+}
+</style>
+
+<script>
+   let countryData = {}; // Store country data
+
+// Fetch country data from Django API
+fetch('/api/countries/')
+    .then(response => response.json())
+    .then(data => {
+        // Store country data with country codes as keys
+        data.forEach(country => {
+            countryData[country.code] = country;
+        });
+
+        // Add click event to each country path (use ID as the country code)
+        document.querySelectorAll("path").forEach(country => {
+            country.addEventListener("click", function() {
+                let countryCode = this.getAttribute("id"); // Get two-letter code from SVG
+                if (countryData[countryCode]) {
+                    let data = countryData[countryCode];  // Retrieve country info
+                    showCountryInfo(data.name, data.capital, data.population);
+                } else {
+                    console.warn("No data found for:", countryCode);
+                }
+            });
+        });
+    })
+    .catch(error => console.error("Error fetching country data:", error));
+
+
+   document.addEventListener("DOMContentLoaded", function() {
+       // Add event listeners to each country path
+       document.querySelectorAll("path").forEach(country => {
+           country.addEventListener("click", function() {
+               let countryName = this.getAttribute("id");  // Get country ID from SVG
+               if (countryData[countryName]) {
+                   let data = countryData[countryName];  // Retrieve country info
+                   showCountryInfo(data.name, data.capital, data.population);
+               } else {
+                   console.warn("No data found for:", countryName);
+               }
+           });
+       });
+   });
+
+   // Function to display country info when clicked
+   function showCountryInfo(name, capital, population) {
+       let infoBox = document.getElementById("info-box");
+       document.getElementById("country-name").innerText = name;
+       document.getElementById("capital").innerText = capital;
+       document.getElementById("population").innerText = population.toLocaleString();
+       infoBox.style.display = "block"; // Show the info box
+   }
+</script>
