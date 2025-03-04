@@ -13,7 +13,6 @@ def country_list(request):
         "languages",
         "flag_url",
         "timezone",
-        "gini_index",
         "currency_name",
         "currency_symbol",
         "demonym_m",

@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = "Populate the Country table with selected data from REST Countries API"
 
     def handle(self, *args, **kwargs):
-        url = "https://restcountries.com/v3.1/all"
+        url = "https://restcountries.com/v3.1/region/africa"
         response = requests.get(url)
 
         if response.status_code != 200:
@@ -27,7 +27,6 @@ class Command(BaseCommand):
                 languages = country.get("languages", {})
                 flag_url = country.get("flags", {}).get("svg", "")
                 timezone = country.get("timezones", [""])[0]
-                gini_index = country.get("gini", {}).get("2018", None)
 
                 # Extract first available currency (default to empty strings if missing)
                 currency = next(iter(country.get("currencies", {}).values()), {})
@@ -39,8 +38,8 @@ class Command(BaseCommand):
                 demonym_f = country.get("demonyms", {}).get("eng", {}).get("f", "")
 
                 # Only keep African countries
-                if not code or not name or country.get("region") != "Africa":
-                    continue  # Skip non-African countries
+                if not code or not name:
+                    continue  
 
                 # Create or update country record
                 obj, created = Country.objects.update_or_create(
@@ -54,7 +53,6 @@ class Command(BaseCommand):
                         "languages": languages,
                         "flag_url": flag_url,
                         "timezone": timezone,
-                        "gini_index": gini_index,
                         "currency_name": currency_name,
                         "currency_symbol": currency_symbol,
                         "demonym_m": demonym_m,

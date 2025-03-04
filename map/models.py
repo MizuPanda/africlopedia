@@ -10,7 +10,6 @@ class Country(models.Model):
     languages = models.JSONField(default=dict)  # Stores languages as a JSON object
     flag_url = models.URLField()  # flags.svg
     timezone = models.CharField(max_length=50)  # timezones[0]
-    gini_index = models.FloatField(null=True, blank=True)  # gini.2018
     currency_name = models.CharField(max_length=100, blank=True)  # currencies.NGN.name
     currency_symbol = models.CharField(max_length=10, blank=True)  # currencies.NGN.symbol
     demonym_m = models.CharField(max_length=100, blank=True)  # demonyms.eng.m
